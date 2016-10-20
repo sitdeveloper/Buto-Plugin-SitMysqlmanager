@@ -1,0 +1,29 @@
+type: div
+attribute:
+  class: col-md-4
+innerHTML:
+  panel:
+    type: div
+    attribute:
+      class: 'panel panel-default'
+    innerHTML:
+      heading:
+        type: div
+        attribute:
+          class: panel-heading
+        innerHTML:
+          h3:
+            type: h3
+            attribute:
+              class: panel-title
+              onclick: PluginWfAjax.update('panel_console')
+            innerHTML: 'Console'
+      body:
+        type: div
+        attribute:
+          class: panel-body
+          id: panel_console
+        innerHTML:
+#      script:
+#        type: script
+#        innerHTML: "PluginWfAjax.load('panel_show_tables', '/'+app.class+'/show_tables');"

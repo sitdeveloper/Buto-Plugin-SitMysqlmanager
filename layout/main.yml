@@ -1,0 +1,49 @@
+settings:
+  path: 'container/innerHTML/row/innerHTML'
+content:
+  style1:
+    type: style
+    innerHTML: '.wf_form_row{margin-top:10px;}'
+    
+    
+  bootstrap_menu:
+    type: widget
+    data:
+      plugin: 'wf/bootstrap'
+      method: menu
+      datazzz: 'yml:/theme/[theme]/menu/bootstrap_menu.yml'
+      datazz: 'yml:/plugin/wf/editor/menu/bootstrap_menu.yml'
+      data: 'yml:/plugin/sit/mysqlmanager/menu/menu.yml'
+    
+    
+#  theme_info:
+#    type: div
+#    attribute:
+#      class: 'container-fluit'
+#      stylezzz: 'padding-top:20px;'
+#    innerHTML:
+#      -
+#        type: div
+#        attribute:
+#          class: 'col-md-12'
+#        innerHTML:
+#          -
+#            type: strong
+#            innerHTML: 'SIT - Mysqlmanager'
+        
+  container:
+    type: div
+    attribute:
+      class: 'container-fluit'
+      style: 'min-height:300px;'
+    innerHTML:
+      row:
+        type: div
+        attribute:
+          class: row
+          style: "padding:10px"
+#  style2:
+#    type: style
+#    innerHTML: '.panel-body pre{background:lightgray;} .panel-body{padding-bottom:10px;} #wf_editor_workarea .panel-body{padding:0px;} #wf_editor_workarea .navbar{margin:0px;} #wf_editor_workarea textarea{font-family:courier new;}'
+    
+    

@@ -1,0 +1,21 @@
+settings:
+  rewrite_globalszzz:
+    -
+      key: 'sys/settings/plugin/twitter/bootstrap335v/enabled'
+      value: true  
+  layout:
+    - html
+    - main
+  title: SIT-Mysqlmanager
+content:
+  json:
+    type: script
+    innerHTML: 
+  
+  
+#  col_md_12:
+#    type: div
+#    attribute:
+#      class: col-md-12
+#    innerHTML:
+  

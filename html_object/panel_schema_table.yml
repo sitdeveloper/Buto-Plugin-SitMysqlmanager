@@ -1,0 +1,53 @@
+type: div
+attribute:
+  class: 'panel panel-default'
+innerHTML:
+  heading:
+    type: div
+    attribute:
+      class: panel-heading
+      style: "background:white"
+    innerHTML:
+      h3:
+        type: h3
+        attribute:
+          class: panel-title
+        innerHTML: '_set_in_action'
+  body:
+    type: div
+    attribute:
+      class: panel-body
+      id: panel_schema
+    innerHTML:
+      alert:
+        type: div
+        innerHTML: 'sdfs'
+        attribute:
+          class: 'alert alert-warning'
+        settings:
+          disabled: true
+      description:
+        type: div
+        innerHTML: _set_in_action_
+      pre:
+        type: pre
+        innerHTML: '_set_in_action_'
+      link_console:
+        type: a
+        attribute:
+          data-table: _set_in_action_
+          onclick: "if(confirm('Want to create this table?')){PluginWfAjax.load('console_'+this.getAttribute('data-table'), '/'+app.class+'/console/table/'+this.getAttribute('data-table'));};return false;"
+        innerHTML:
+          glyphicon:
+            type: span
+            attribute:
+              class: 'glyphicon glyphicon-cloud-upload'
+              aria-hidden: true
+      sql_create:
+        type: span
+        innerHTML: _set_in_action_
+      console:
+        type: pre
+        attribute:
+          id: _set_in_action_
+          

@@ -1,0 +1,29 @@
+type: div
+attribute:
+  class: col-md-8
+innerHTML:
+  panel:
+    type: div
+    attribute:
+      class: 'panel panel-default'
+    innerHTML:
+      heading:
+        type: div
+        attribute:
+          class: panel-heading
+        innerHTML:
+          h3:
+            type: h3
+            attribute:
+              class: panel-title
+              onclick: PluginWfAjax.update('panel_schema')
+            innerHTML: 'Schema'
+      body:
+        type: div
+        attribute:
+          class: panel-body
+          id: panel_schema
+        innerHTML:
+      script:
+        type: script
+        innerHTML: "PluginWfAjax.load('panel_schema', '/'+app.class+'/schema');"

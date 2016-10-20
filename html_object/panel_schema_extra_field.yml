@@ -1,0 +1,26 @@
+type: div
+attribute:
+  class: col-md-8
+innerHTML:
+  panel:
+    type: div
+    attribute:
+      class: 'panel panel-default'
+    innerHTML:
+      heading:
+        type: div
+        attribute:
+          class: panel-heading
+        innerHTML:
+          h3:
+            type: h3
+            attribute:
+              class: panel-title
+            innerHTML: 'Extra field'
+      body:
+        type: div
+        attribute:
+          class: panel-body
+        innerHTML:
+          pre:
+            type: pre

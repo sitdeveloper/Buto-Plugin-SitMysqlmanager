@@ -1,0 +1,50 @@
+settings:
+  fluit: true
+brand:
+  lable: 'Home'
+  href: '/'
+navbar:
+  -
+    class: 'navbar'
+    item:
+      -
+        lable: Get create script
+        href: "javascript:PluginWfBootstrapjs.modal({id: 'get_create_script', url: '/[class]/get_create_script', lable: 'Files', size: 'lg'});"
+#      -
+#        lable: Plugin
+#        href: "javascript:PluginWfBootstrapjs.modal({id: 'modal_plugin', url: '/editor/plugin', lable: 'Plugin', size: 'lg'});"
+#      -
+#        lable: Theme
+#        href: "javascript:PluginWfBootstrapjs.modal({id: 'modal_plugin', url: '/editor/theme', lable: 'Themes', size: 'lg'});"
+  -
+    class: 'navbar'
+    element:
+      type: p
+      attribute:
+        class: 'navbar-text'
+        style: 'font-weight:bold'
+        onclick: "location.reload();"
+      innerHTML: 'Sit/Mysqlmanager'
+  -
+    class: 'navbar-right'
+    element:
+      type: p
+      attribute:
+        class: 'navbar-text'
+      innerHTML: 'globals:_SESSION/email'
+#  -
+#    class: 'navbar-right'
+#    element:
+#      type: p
+#      attribute:
+#        class: 'navbar-text'
+#      innerHTML:
+#        -
+#          type: span
+#          innerHTML: 'Theme:'
+#        -
+#          type: span
+#          innerHTML: 'globals:sys/theme'
+          
+    
+    
