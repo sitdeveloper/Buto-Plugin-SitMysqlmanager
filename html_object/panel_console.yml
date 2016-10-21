@@ -24,6 +24,3 @@ innerHTML:
           class: panel-body
           id: panel_console
         innerHTML:
-#      script:
-#        type: script
-#        innerHTML: "PluginWfAjax.load('panel_show_tables', '/'+app.class+'/show_tables');"
