@@ -1,6 +1,6 @@
 type: div
 attribute:
-  class: col-md-12
+  class: col-md-6
 innerHTML:
   panel:
     type: div
