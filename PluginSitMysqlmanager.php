@@ -40,7 +40,8 @@ tables:
         type: int(11)
         default: 'null'
         foreing_key:
-          reference: country(id)
+          reference_table: country
+          reference_field: id
           on_delete: RESTRICT
           on_update: CASCADE
       name:
@@ -212,7 +213,7 @@ class PluginSitMysqlmanager{
           if(strtoupper($field->get('foreing_key/on_update')) == 'CASCADE'){
             $on_update = " ON UPDATE CASCADE";
           }
-          $constraint[] = "CONSTRAINT ".$key."_".$key2."_fk FOREIGN KEY (".$key2.") REFERENCES ".$field->get('foreing_key/reference')."$on_delete$on_update";
+          $constraint[] = "CONSTRAINT ".$key."_".$key2."_fk FOREIGN KEY (".$key2.") REFERENCES ".$field->get('foreing_key/reference_table')."(".$field->get('foreing_key/reference_field').")$on_delete$on_update";
         }
       }
       $schema->set('tables/'.$key.'/sql/constraint', $constraint);
