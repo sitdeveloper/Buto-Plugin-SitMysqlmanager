@@ -1,6 +1,65 @@
 <?php
 /**
 <p>Page plugin to sync mysql database against yml data. Store schema in yml and push creation or changes to mysql server.</p>
+<p>Setup example</p>
+#code-yml#
+plugin_modules:
+  mysqlmanager:
+    plugin: 'sit/mysqlmanager'
+    settings:
+      mysql:
+        server: 'localhost'
+        database: '_db_name'
+        user_name: '_user_name'
+        password: '_password'
+      schema: '/theme/_org/_name/mysql/schema.yml'
+#code#
+<p>Schema example</p>
+#code-yml#
+tables:
+  country:
+    _description: Country
+    field:
+      id:
+        type: int(11)
+        not_null: true
+        auto_increment: true
+        primary_key: true
+      name:
+        type: varchar(50)
+        default: 'null'
+  county:
+    _description: County
+    field:
+      id:
+        type: int(11)
+        not_null: true
+        auto_increment: true
+        primary_key: true
+      country_id:
+        type: int(11)
+        default: 'null'
+        foreing_key:
+          reference: country(id)
+          on_delete: RESTRICT
+          on_update: CASCADE
+      name:
+        type: varchar(50)
+        default: 'null'
+extra:
+  _description: Extra field to add to each table if not exist in schema.
+  field:
+    created_at:
+      type: timestamp
+      default: CURRENT_TIMESTAMP
+    updated_at:
+      type: timestamp
+      default: 'null'
+    created_by:
+      type: varchar(50)
+    updated_by:
+      type: varchar(50)
+#code#
 */
 class PluginSitMysqlmanager{
   /**
