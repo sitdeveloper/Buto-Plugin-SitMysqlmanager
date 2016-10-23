@@ -166,7 +166,11 @@ class PluginSitMysqlmanager{
           $auto_increment = " auto_increment";
         }else{
           if(strlen($field->get('default'))){
-            $default = " default ".$field->get('default');
+            if(strtolower($field->get('default')) == 'null' || strtoupper($field->get('default'))=='CURRENT_TIMESTAMP'){
+              $default = " default ".$field->get('default')."";
+            }else{
+              $default = " default '".$field->get('default')."'";
+            }
           }
         }
         $fields[$key2] = "$key2 $type$not_null$default$auto_increment";
