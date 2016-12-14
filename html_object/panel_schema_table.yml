@@ -19,13 +19,6 @@ innerHTML:
       class: panel-body
       id: panel_schema
     innerHTML:
-      alert:
-        type: div
-        innerHTML: 'sdfs'
-        attribute:
-          class: 'alert alert-warning'
-        settings:
-          disabled: true
       description:
         type: div
         innerHTML: _set_in_action_
@@ -46,6 +39,13 @@ innerHTML:
       sql_create:
         type: span
         innerHTML: _set_in_action_
+      alert:
+        type: div
+        innerHTML: 'sdfs'
+        attribute:
+          class: 'alert alert-warning'
+        settings:
+          disabled: true
       console:
         type: pre
         attribute:

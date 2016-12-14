@@ -76,6 +76,10 @@ class PluginSitMysqlmanager{
     wfArray::set($GLOBALS, 'sys/layout_path', '/plugin/sit/mysqlmanager/layout');
     wfPlugin::includeonce('wf/array');
     $this->settings = new PluginWfArray(wfArray::get($GLOBALS, 'sys/settings/plugin_modules/'.wfArray::get($GLOBALS, 'sys/class').'/settings'));
+    /**
+     * Handle mysql param if string to yml file.
+     */
+    $this->settings->set('mysql', wfSettings::getSettingsFromYmlString($this->settings->get('mysql')));
   }
   /**
    <p>Start page.</p>
@@ -268,6 +272,21 @@ class PluginSitMysqlmanager{
     $page = $this->getYml('page/schema_table.yml');
     $panel = $this->getYml('html_object/panel_schema_table.yml');
     foreach ($schema->get('tables') as $key => $value) {
+      
+      /**
+       * Add field from extra param.
+       */
+      if($schema->get('extra/field')){
+        foreach ($schema->get('extra/field') as $key2 => $value2) {
+          if(!isset($value['field'][$key2])){
+            $value['field'][$key2] = $value2;
+            $schema->set("tables/$key/field/$key2", $value2);
+          }
+        }
+      }
+      /**
+       * 
+       */
       $table = new PluginWfArray($value);
       $alert = null;
       $panel->set('innerHTML/body/innerHTML/sql_create/innerHTML', $value['sql']['create']);
@@ -284,7 +303,8 @@ class PluginSitMysqlmanager{
         $panel->set('innerHTML/heading/innerHTML/h3/innerHTML', $key);
         foreach ($schema->get("tables/$key/field") as $key2 => $value2) {
           if(!$show_tables->get("$key/field/$key2") ){
-            $alert .= "Field $key2 is missing in database.<br>";
+            $onclick = "PluginWfAjax.load('console_$key', '/'+app.class+'/add_field/table/$key/field/$key2');";
+            $alert .= "Field $key2 is missing in database,  <a href=#! onclick=\"$onclick\">Add</a>.<br>";
           }
         }
         if($alert){
@@ -311,6 +331,30 @@ class PluginSitMysqlmanager{
     $script = wfDocument::createHtmlElement('script', "alert('Table ".wfRequest::get('table')." was created.')");
     wfDocument::renderElement(array($script));
   }
+  
+  /**
+   * <p>Add field.</p>
+   */
+  public function page_add_field(){
+    $this->init();
+    $table = wfRequest::get('table');
+    $field = wfRequest::get('field');
+    $schema = wfSettings::getSettingsAsObject($this->settings->get('schema'));
+    
+    
+    $do_create_sql = $this->doCreateSql($schema);
+    //wfHelp::yml_dump($do_create_sql->get("tables/$table/sql/fields/$field"));
+    
+    $type = $schema->get("tables/$table/field/$field/type");
+    //$sql = "ALTER TABLE $table ADD COLUMN $field $type NULLzzz;";
+    $sql = "ALTER TABLE $table ADD COLUMN ".$do_create_sql->get("tables/$table/sql/fields/$field").";";
+    wfHelp::yml_dump($sql);
+    $temp = $this->runSQL($sql);
+    var_dump($temp);
+    
+    
+  }
+  
   /**
    <p>Ajax page to get all create script in a textbox.</p>
    */
