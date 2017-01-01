@@ -123,12 +123,12 @@ class PluginSitMysqlmanager{
     $show_tables = $this->runSQL("show tables;");
     $temp = array();
     foreach ($show_tables->get() as $key => $value) {
-      $columns = $this->runSQL("show columns from ".$value['Tables_in_'.$this->settings->get('mysql/database')].";");
+      $columns = $this->runSQL("show columns from ".$value['Tables_in_'.wfCrypt::decryptFromString($this->settings->get('mysql/database'))].";");
       $field = array();
       foreach ($columns->get() as $key2 => $value2) {
         $field[$value2['Field']] = $value2;
       }
-      $temp[$value['Tables_in_'.$this->settings->get('mysql/database')]] = array('field' => $field);
+      $temp[$value['Tables_in_'.wfCrypt::decryptFromString($this->settings->get('mysql/database'))]] = array('field' => $field);
     }
     $show_tables->set(null, $temp);
     return $show_tables;
