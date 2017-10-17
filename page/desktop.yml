@@ -6,5 +6,5 @@ settings:
 content:
   json:
     type: script
-    innerHTML: 
+    innerHTML:
   

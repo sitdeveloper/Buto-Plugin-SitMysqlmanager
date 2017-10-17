@@ -63,6 +63,11 @@ extra:
 #code#
 */
 class PluginSitMysqlmanager{
+  function __construct($buto = false) {
+    if($buto){
+      $GLOBALS['sys']['settings']['plugin']['twitter']['bootstrap335v']['enabled'] = 'true';
+    }
+  }
   /**
   */
   private $settings = null;
@@ -89,15 +94,21 @@ class PluginSitMysqlmanager{
     $desktop = $this->getYml('page/desktop.yml');
     $desktop->set('content/json/innerHTML', "var app = {class: '".wfArray::get($GLOBALS, 'sys/class')."'};");
     $panel_show_tables = $this->getYml('html_object/panel_show_tables.yml');
+    
+    $panel_data = $this->getYml('html_object/panel_data.yml');
+    $this->settings->set('mysql/password', '******');
+    $panel_data->set('innerHTML/panel/innerHTML/body/innerHTML/pre/innerHTML', wfHelp::getYmlDump($this->settings->get()));
+    $desktop->set('content/data', $panel_data->get());
+    
     $panel_schema = $this->getYml('html_object/panel_schema.yml');
     $panel_schema_extra_field = $this->getYml('html_object/panel_schema_extra_field.yml');
     $schema = wfSettings::getSettingsAsObject($this->settings->get('schema'));
-    $desktop->set('content/', $panel_schema->get());
+    $desktop->set('content/schema', $panel_schema->get());
     if($schema->get('extra')){
       $panel_schema_extra_field->set('innerHTML/panel/innerHTML/body/innerHTML/pre/innerHTML', wfHelp::getYmlDump($schema->get('extra')));
-      $desktop->set('content/', $panel_schema_extra_field->get());
+      $desktop->set('content/extra_field', $panel_schema_extra_field->get());
     }
-    $desktop->set('content/', $panel_show_tables->get());
+    $desktop->set('content/show_tables', $panel_show_tables->get());
     wfDocument::mergeLayout($desktop->get());
   }
   /**
