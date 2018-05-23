@@ -119,13 +119,62 @@ class PluginSitMysqlmanager{
     $show_tables = $this->showTables();
     $div = array();
     foreach ($show_tables->get() as $key => $value) {
-      $div[] = wfDocument::createHtmlElement('text', $key.'<br>');
+      $div[] = wfDocument::createHtmlElement('p', $key, array('style' => 'cursor:pointer', 'onclick' => "PluginWfBootstrapjs.modal({id: 'modal_generate_sql', url: 'generate_sql?table=$key', lable: 'SQL', size: 'lg'});"));
       foreach ($value['field'] as $key2 => $value2) {
         $div[] = wfDocument::createHtmlElement('text', '&nbsp;&nbsp;'.$key2.'<br>');
       }
     }
     $pre = wfDocument::createHtmlElement('pre', ($div));
     wfDocument::renderElement(array($pre));
+  }
+  public function page_generate_sql(){
+    $this->init();
+    $element = array();
+    $element[] = wfDocument::createHtmlElement('pre', wfHelp::getYmlDump($this->getGeneratedSql()));
+    wfDocument::renderElement($element);
+  }
+  private function getGeneratedSql(){
+    $table = wfRequest::get('table');;
+    $return = new PluginWfArray();
+    $columns = $this->runSQL("show columns from `$table`;");
+    $field = null;
+    $field_params = null;
+    $select = array();
+    $params = array();
+    foreach ($columns->get() as $key => $value) {
+      $r = new PluginWfArray($value);
+      /**
+       * Sql
+       */
+      $field .= $r->get('Field').',';
+      $field_params .= $r->get('Field').'=? and ';
+      /**
+       * Select
+       */
+      $select[] = $r->get('Field');
+      /**
+       * Params
+       */
+      $type = null;
+      if(strstr($r->get('Type'), 'varchar')){
+        $type = 's';
+      }elseif(strstr($r->get('Type'), 'date')){
+        $type = 's';
+      }elseif(strstr($r->get('Type'), 'int')){
+        $type = 'i';
+      }elseif(strstr($r->get('Type'), 'dou')){
+        $type = 'd';
+      }
+      $params[$r->get('Field')] = array('type' => $type, 'value' => '_');
+    }
+    if(strlen($field)){
+      $field = substr($field, 0, strlen($field)-1);
+      $field_params = substr($field_params, 0, strlen($field_params)-5);
+    }
+    $return->set($table.'_select/sql', "select $field from $table where $field_params;");
+    $return->set($table.'_select/select', $select);
+    $return->set($table.'_select/params', $params);
+    return $return->get();
   }
   /**
    <p>Method to get all tables and fields in db.</p>
@@ -134,7 +183,7 @@ class PluginSitMysqlmanager{
     $show_tables = $this->runSQL("show tables;");
     $temp = array();
     foreach ($show_tables->get() as $key => $value) {
-      $columns = $this->runSQL("show columns from ".$value['Tables_in_'.wfCrypt::decryptFromString($this->settings->get('mysql/database'))].";");
+      $columns = $this->runSQL("show columns from `".$value['Tables_in_'.wfCrypt::decryptFromString($this->settings->get('mysql/database'))]."`;");
       $field = array();
       foreach ($columns->get() as $key2 => $value2) {
         $field[$value2['Field']] = $value2;
