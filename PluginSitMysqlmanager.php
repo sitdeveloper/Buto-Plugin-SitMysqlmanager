@@ -69,7 +69,8 @@ class PluginSitMysqlmanager{
     }
   }
   /**
-  */
+   * 
+   */
   private $settings = null;
   /**
    <p>Init method.</p>
