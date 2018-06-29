@@ -1,5 +1,6 @@
 # Buto-Plugin-SitMysqlmanager
 Page plugin to sync mysql database against yml data. Store schema in yml and push creation or changes to mysql server.
+Also a form to insert/update/delete via sql commands.
 
 ## Settings
 
