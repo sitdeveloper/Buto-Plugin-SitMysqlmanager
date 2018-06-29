@@ -343,6 +343,10 @@ class PluginSitMysqlmanager{
       $item->set('alert_style', 'display:none');
       $item->set('heading_style', null);
       $item->set('not_in_database_style', 'display:none');
+      $item->set('insert_style', 'display:none');
+      if($item->get('insert')){
+        $item->set('insert_style', '');
+      }
       /**
        * Add field from extra param.
        */
@@ -437,6 +441,51 @@ class PluginSitMysqlmanager{
     }
     $textarea = wfDocument::createHtmlElement('textarea', $sql, array('style' => "width:100%;height:300px;"));
     wfDocument::renderElement(array($textarea));
+  }
+  /**
+   * SQL command.
+   */
+  public function page_sql_command(){
+    $this->init();
+    $schema = wfSettings::getSettingsAsObject($this->settings->get('schema'));
+    $sql = new PluginWfArray();
+    /**
+     * If param table.
+     */
+    $table = wfRequest::get('table');
+    if($table){
+      $insert = $schema->get("tables/$table/insert");
+      if($insert){
+        $insert = new PluginWfArray($insert);
+        $sql = wfSettings::getSettingsAsObject($insert->get('file'), $insert->get('key'));
+      }
+    }
+    /**
+     * 
+     */
+    $page = $this->getYml('html_object/sql_command.yml');
+    $page->setByTag(wfGlobals::get());
+    $page->setByTag(array('sql' => $sql->get()), 'insert');
+    wfDocument::renderElement($page->get());
+  }
+  /**
+   * SQL command.
+   */
+  public function page_sql_run(){
+    $this->init();
+    $sql_command = wfRequest::get('sql_command');
+    $commands = explode(';', $sql_command);
+    $result = new PluginWfArray();
+    foreach ($commands as $key => $value) {
+      if(!$value){
+        continue;
+      }
+      $rs = $this->runSQL($value);
+      
+      $result->set($key, array('query' => trim($value), 'data' => $rs->get()));
+    }
+    echo wfHelp::getYmlDump($result->get());
+    exit;
   }
   /**
    * Get yml.

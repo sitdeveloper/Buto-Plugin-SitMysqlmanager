@@ -1,0 +1,62 @@
+-
+  type: div
+  attribute:
+    class: row
+  innerHTML:
+    -
+      type: div
+      attribute:
+        class: col-md-12
+      innerHTML:
+        -
+          type: form
+          attribute:
+            id: query_form
+            method: post
+            role: form
+          innerHTML:
+            -
+              type: div
+              attribute:
+                class: form-group
+              innerHTML:
+                -
+                  type: textarea
+                  attribute:
+                    id: sql_command
+                    name: sql_command
+                    class: form-control
+                    style: 'height:300px'
+                  innerHTML: insert:sql
+#            -
+#              type: div
+#              attribute:
+#                class: 'alert alert-warning'
+#                id: warning
+#              innerHTML: 
+            -
+              type: button
+              attribute:
+                class: btn btn-default
+                type: submit
+                id: button
+                data-class: rs:class
+                onclick: "$.post('/'+this.getAttribute('data-class')+'/sql_run', $('#query_form').serialize()).done(function(data) { document.getElementById('query_run').innerHTML=data; }); return false;"
+              innerHTML: Run query
+-
+  type: div
+  attribute:
+    class: row
+  innerHTML:
+    -
+      type: div
+      attribute:
+        class: col-md-12
+      innerHTML:
+        -
+          type: pre
+          attribute:
+            id: query_run
+          innerHTML: 
+            
+            

@@ -8,8 +8,11 @@ navbar:
     class: 'navbar'
     item:
       -
-        lable: Get create script
+        lable: Create script
         href: "javascript:PluginWfBootstrapjs.modal({id: 'get_create_script', url: '/[class]/get_create_script', lable: 'Files', size: 'lg'});"
+      -
+        lable: SQL command
+        href: "javascript:PluginWfBootstrapjs.modal({id: 'sql_command', url: '/[class]/sql_command', lable: 'SQL command', size: 'lg'});"
   -
     class: 'navbar'
     element:

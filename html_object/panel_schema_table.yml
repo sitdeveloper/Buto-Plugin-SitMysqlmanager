@@ -52,6 +52,26 @@ innerHTML:
         type: span
         innerHTML: 'sql:create'
       -
+        type: p
+        attribute:
+          style: rs:insert_style
+        innerHTML:
+          -
+            type: a
+            attribute:
+              class: btn btn-default
+              data-table: 'rs:table'
+              onclick: "PluginWfBootstrapjs.modal({id: 'sql_command', url: '/'+app.class+'/sql_command/table/'+this.getAttribute('data-table'), lable: 'SQL command', size: 'lg'});"
+            innerHTML:
+              -
+                type: span
+                innerHTML: Insert
+              -
+                type: span
+                attribute:
+                  class: 'glyphicon glyphicon-cloud-upload'
+                  aria-hidden: true
+      -
         type: div
         innerHTML: rs:alert
         attribute:
