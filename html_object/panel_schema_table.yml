@@ -2,52 +2,63 @@ type: div
 attribute:
   class: 'panel panel-default'
 innerHTML:
-  heading:
+  -
     type: div
     attribute:
       class: panel-heading
-      style: "background:white"
+      style: rs:heading_style
     innerHTML:
-      h3:
+      -
         type: h3
         attribute:
           class: panel-title
-        innerHTML: '_set_in_action'
-  body:
+        innerHTML:
+          -
+            type: text
+            innerHTML: rs:table
+          -
+            type: span
+            attribute:
+              class: badge
+              style: rs:not_in_database_style
+            innerHTML: Not in database
+  -
     type: div
     attribute:
       class: panel-body
-      id: panel_schema
     innerHTML:
-      description:
+      -
         type: div
-        innerHTML: _set_in_action_
-      pre:
+        innerHTML: rs:description
+      -
         type: pre
-        innerHTML: '_set_in_action_'
-      link_console:
+        innerHTML: 'rs:yml_dump'
+      -
         type: a
         attribute:
-          data-table: _set_in_action_
-          onclick: "if(confirm('Want to create this table?')){PluginWfAjax.load('console_'+this.getAttribute('data-table'), '/'+app.class+'/console/table/'+this.getAttribute('data-table'));};return false;"
+          class: btn btn-default
+          data-table: 'rs:table'
+          onclick: "PluginWfAjax.load('console_'+this.getAttribute('data-table'), '/'+app.class+'/console/table/'+this.getAttribute('data-table'));return false;"
         innerHTML:
-          glyphicon:
+          -
+            type: span
+            innerHTML: Create
+          -
             type: span
             attribute:
               class: 'glyphicon glyphicon-cloud-upload'
               aria-hidden: true
-      sql_create:
+      -
         type: span
-        innerHTML: _set_in_action_
-      alert:
+        innerHTML: 'sql:create'
+      -
         type: div
-        innerHTML: 'sdfs'
+        innerHTML: rs:alert
         attribute:
           class: 'alert alert-warning'
-        settings:
-          disabled: true
-      console:
+          style: rs:alert_style
+      -
         type: pre
         attribute:
-          id: _set_in_action_
+          id: rs:console_id
           

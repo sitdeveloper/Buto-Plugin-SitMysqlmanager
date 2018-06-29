@@ -69,8 +69,7 @@ class PluginSitMysqlmanager{
     }
   }
   /**
-   * 
-   */
+  */
   private $settings = null;
   /**
    <p>Init method.</p>
@@ -335,49 +334,54 @@ class PluginSitMysqlmanager{
     $schema = wfSettings::getSettingsAsObject($this->settings->get('schema'));
     $schema = $this->doCreateSql($schema);
     $page = $this->getYml('page/schema_table.yml');
-    $panel = $this->getYml('html_object/panel_schema_table.yml');
     foreach ($schema->get('tables') as $key => $value) {
-      
+      $panel = $this->getYml('html_object/panel_schema_table.yml');
+      $item = new PluginWfArray($value);
+      $item->set('table', $key);
+      $item->set('console_id', 'console_'.$key);
+      $item->set('alert', null);
+      $item->set('alert_style', 'display:none');
+      $item->set('heading_style', null);
+      $item->set('not_in_database_style', 'display:none');
       /**
        * Add field from extra param.
        */
       if($schema->get('extra/field')){
         foreach ($schema->get('extra/field') as $key2 => $value2) {
           if(!isset($value['field'][$key2])){
-            $value['field'][$key2] = $value2;
+            $item->set("field/$key2", $value2);
             $schema->set("tables/$key/field/$key2", $value2);
           }
         }
       }
+      $item->set('yml_dump', wfHelp::getYmlDump($item->get()));
       /**
        * 
        */
-      $table = new PluginWfArray($value);
       $alert = null;
-      $panel->set('innerHTML/body/innerHTML/sql_create/innerHTML', $value['sql']['create']);
-      $panel->set('innerHTML/body/innerHTML/link_console/attribute/data-table', $key);
-      $panel->set('innerHTML/body/innerHTML/pre/innerHTML', wfHelp::getYmlDump($value));
-      $panel->set('innerHTML/body/innerHTML/pre/settings/disabled', false);
-      $panel->set('innerHTML/body/innerHTML/description/innerHTML', $table->get('description'));
-      $panel->set('innerHTML/body/innerHTML/alert/settings/disabled', true);
-      $panel->set('innerHTML/body/innerHTML/console/attribute/id', 'console_'.$key);
       if($show_tables->get($key)==null){
-        $panel->set('innerHTML/heading/attribute/style', 'background:yellow');
-        $panel->set('innerHTML/heading/innerHTML/h3/innerHTML', $key.' (not in database)');
+        $item->set('heading_style', 'background:yellow');
+        $item->set('not_in_database_style', null);
       }else{
-        $panel->set('innerHTML/heading/innerHTML/h3/innerHTML', $key);
         foreach ($schema->get("tables/$key/field") as $key2 => $value2) {
           if(!$show_tables->get("$key/field/$key2") ){
             $onclick = "PluginWfAjax.load('console_$key', '/'+app.class+'/add_field/table/$key/field/$key2');";
-            $alert .= "Field $key2 is missing in database,  <a href=#! onclick=\"$onclick\">Add</a>.<br>";
+            $alert .= "<a href=#! onclick=\"$onclick\">Add</a> missing field $key2.<br>";
           }
         }
         if($alert){
-          $panel->set('innerHTML/body/innerHTML/alert/innerHTML', $alert);
-          $panel->set('innerHTML/body/innerHTML/alert/settings/disabled', false);
-        }else{
+          $item->set('alert', $alert);
+          $item->set('alert_style', null);
         }
       }
+      /**
+       * Set data in panel.
+       */
+      $panel->setByTag($item->get('sql'), 'sql');
+      $panel->setByTag($item->get(), 'rs', true);
+      /**
+       * Set data in page.
+       */
       $page->set('content/', $panel->get());
     }
     wfDocument::mergeLayout($page->get());
