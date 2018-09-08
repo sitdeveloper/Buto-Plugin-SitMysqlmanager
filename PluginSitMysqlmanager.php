@@ -92,9 +92,15 @@ class PluginSitMysqlmanager{
   public function page_desktop(){
     $this->init();
     $desktop = $this->getYml('page/desktop.yml');
+    /**
+     * Insert admin layout from theme.
+     */
+    $desktop = wfDocument::insertAdminLayout($this->settings, 1, $desktop);
+    /**
+     * 
+     */
     $desktop->set('content/json/innerHTML', "var app = {class: '".wfArray::get($GLOBALS, 'sys/class')."'};");
     $panel_show_tables = $this->getYml('html_object/panel_show_tables.yml');
-    
     $panel_data = $this->getYml('html_object/panel_data.yml');
     $this->settings->set('mysql/password', '******');
     $panel_data->set('innerHTML/panel/innerHTML/body/innerHTML/pre/innerHTML', wfHelp::getYmlDump($this->settings->get()));
@@ -448,6 +454,7 @@ class PluginSitMysqlmanager{
   public function page_sql_command(){
     $this->init();
     $schema = wfSettings::getSettingsAsObject($this->settings->get('schema'));
+    wfHelp::yml_dump($schema);
     $sql = new PluginWfArray();
     /**
      * If param table.
@@ -504,4 +511,63 @@ class PluginSitMysqlmanager{
     $test = $mysql->runSql($sql);
     return new PluginWfArray($test['data']);
   }
+  
+  public function page_sql_query(){
+    $this->init();
+    $element = array();
+    $element[] = wfDocument::createHtmlElement('h5', 'SQL');
+    $element[] = wfDocument::createHtmlElement('form', array(
+        wfDocument::createHtmlElement('textarea', wfRequest::get('sql'), array('style' => 'width:100%;height:200px;', 'name' => 'sql')),
+        wfDocument::createHtmlElement('span', 'Skip count'),
+        wfDocument::createHtmlElement('input', null, array('type' => 'checkbox', 'name' => 'skip_count'))
+        ), array('action' => '/zzz', 'method' => 'post', 'id' => 'frm_mysqlmanager'));
+    $onclick = " $.post('/".wfGlobals::get('class')."/sql_query_run?_time=1', $('#frm_mysqlmanager').serialize()).done(function(data) { document.getElementById('sql_query_div').innerHTML=data; return false; });";
+    $element[] = wfDocument::createHtmlElement('a', 'Run SQL', array('onclick' => $onclick, 'class' => 'btn btn-default'));
+    $element[] = wfDocument::createHtmlElement('div', null, array('id' => 'sql_query_div'));
+    wfDocument::renderElement($element);
+  }
+  public function page_sql_query_run(){
+    $this->init();
+    /**
+     * Request.
+     */
+    if(wfRequest::get('sql')){
+      $rows = preg_split("/\r\n/", wfRequest::get('sql'));
+      $str = '';
+      foreach ($rows as $key => $sql) {
+        if($sql){
+          $row_str = '';
+          $sql = str_replace('[uid]', wfCrypt::getUid(), $sql);
+//          $sql = str_replace('[pwd]', generatePassword(), $sql);
+          //$rs = $havanna->mysql->runSql($sql, null);
+          $rs = $this->sql_query_run($sql);
+//          wfHelp::yml_dump($rs);
+          if(wfRequest::get('skip_count')!='on'){
+            $row_str .= $rs['num_rows']."\t";
+          }
+          if($rs['num_rows'] > 0){
+            foreach ($rs['data'][0] as $key3 => $value3) {
+              $row_str .= $value3."\t";
+            }
+          }
+          $row_str = substr($row_str, 0, strlen($row_str)-1);
+          $str .= $row_str."\n";
+        }else{
+          $str .= "\n";
+        }
+      }
+      $element = array();
+      $element[] = wfDocument::createHtmlElement('textarea', $str, array('style' => 'width:100%;height:200px;'));
+      wfDocument::renderElement($element);
+    }
+  }
+  private function sql_query_run($sql){
+    wfPlugin::includeonce('wf/mysql');
+    $mysql = new PluginWfMysql();
+    $mysql->open($this->settings->get('mysql'));
+    $test = $mysql->runSql($sql, null);
+    return $test;
+    //return new PluginWfArray($test['data']);
+  }
+  
 }
