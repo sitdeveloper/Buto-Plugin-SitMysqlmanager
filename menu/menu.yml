@@ -13,6 +13,9 @@ navbar:
       -
         lable: SQL command
         href: "javascript:PluginWfBootstrapjs.modal({id: 'sql_command', url: '/[class]/sql_command', lable: 'SQL command', size: 'lg'});"
+      -
+        lable: SQL query
+        href: "javascript:PluginWfBootstrapjs.modal({id: 'sql_query', url: '/[class]/sql_query', lable: 'SQL query', size: 'lg'});"
   -
     class: 'navbar'
     element:
