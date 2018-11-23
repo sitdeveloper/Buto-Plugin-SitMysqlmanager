@@ -152,7 +152,7 @@ class PluginSitMysqlmanager{
       /**
        * Sql
        */
-      $field .= $r->get('Field').',';
+      $field .= $r->get('Field').",";
       $field_params .= $r->get('Field').'=? and ';
       /**
        * Select
@@ -171,7 +171,7 @@ class PluginSitMysqlmanager{
       }elseif(strstr($r->get('Type'), 'dou')){
         $type = 'd';
       }
-      $params[$r->get('Field')] = array('type' => $type, 'value' => '_');
+      $params[] = array('type' => $type, 'value' => "rs:".$r->get('Field'));
     }
     if(strlen($field)){
       $field = substr($field, 0, strlen($field)-1);
